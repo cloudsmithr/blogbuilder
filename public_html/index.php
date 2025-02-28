@@ -5,6 +5,7 @@ ini_set('display_errors', 1);
 require_once __DIR__ . '/../src/core/autoload.php'; // auto-loads classes
 
 use src\controllers\maincontroller;
+use src\controllers\blogcontroller;
 
 // Normalize request URI
 $uri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
@@ -13,6 +14,7 @@ $uri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 $uri = rtrim($uri, '/');
 
 $controller = new maincontroller();
+$blogcontroller = new blogcontroller();
 
 switch ($uri)
 {
@@ -24,6 +26,12 @@ switch ($uri)
         break;
     case 'about':
         $controller->about();
+        break;
+    case 'blog':
+        $blogcontroller->index();
+        break;
+    case preg_match('/^blog\/(.+)$/', $uri, $matches):
+        $blogcontroller->show($matches[1]);
         break;
     default:
         http_response_code(404);
