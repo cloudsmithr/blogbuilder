@@ -1,0 +1,12 @@
+RewriteEngine On
+
+# Redirect all requests to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
+
+# Block access to sensitive files
+<FilesMatch "(^config\.php|database\.db$)">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
