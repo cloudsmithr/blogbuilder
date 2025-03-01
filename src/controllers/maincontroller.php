@@ -12,6 +12,11 @@ class maincontroller
 
     public function about()
     {
-        view::render('about', ['title' => 'About Us']);
+        view::render('about', ['title' => 'About Me']);
+    }
+
+    public function blog()
+    {
+        view::render('blog', ['title' => 'My Blog']);
     }
 }

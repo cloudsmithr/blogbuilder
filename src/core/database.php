@@ -12,8 +12,32 @@ class database
     {
         if (self::$instance === null) {
             $config = require __DIR__ . '/../config/config.php';
-            self::$instance = new SQLite3($config['db']['path']);
+            $dbPath = $config['db']['path'];
+
+            // Create or open the SQLite database
+            self::$instance = new SQLite3($dbPath);
+
+            // Ensure tables exist
+            self::initializedatabase(self::$instance);
+            
         }
         return self::$instance;
+    }
+
+    private static function initializeDatabase(SQLite3 $db)
+    {
+        $db->exec("
+            CREATE TABLE IF NOT EXISTS posts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                subheader Text,
+                slug TEXT UNIQUE NOT NULL,
+                previewimage TEXT,
+                content TEXT NOT NULL,
+                tags TEXT,
+                created_at INTEGER NOT NULL,
+                updated_at INTEGER NOT NULL
+            )
+        ");
     }
 }
