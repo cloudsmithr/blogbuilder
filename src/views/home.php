@@ -3,8 +3,8 @@
         <h1>Ryan A. Smith</h1>
         <h2 style="margin-top:20px;">Fullstack Engineer, Musician, Guinea Pig Enthusiast</h2>
         <div class="cta-buttons">
-            <a href="./blog.php" class="btn">View My Blog</a>
-            <a href="./about.php" class="btn">About Me</a>
+            <a href="/blog" class="btn">View My Blog</a>
+            <a href="/about" class="btn">About Me</a>
         </div>
     </div>
 </section>
