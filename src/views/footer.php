@@ -5,6 +5,6 @@
             <span style="float: right; font-style: italic;">*inspirational quote goes here*</span>
         </div>
     </footer>
-    <script src="./js/scripts.js"></script>
+    <script src="<?= $baseurl ?>/js/scripts.js"></script>
 </body>
 </html>

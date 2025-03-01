@@ -1,5 +1,4 @@
 <?php
-
 namespace src\controllers;
 
 use src\core\view;
@@ -11,7 +10,7 @@ class blogcontroller
     
     public function __construct()
     {
-        $this->postmodel = new Post();
+        $this->postmodel = new post();
     }
 
     public function index()

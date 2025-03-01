@@ -1,5 +1,4 @@
 <?php
-
 spl_autoload_register(function ($class) {
     $baseDir = realpath(__DIR__ . '/../../') . '/'; // Correctly resolves absolute path
 

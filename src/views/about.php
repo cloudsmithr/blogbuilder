@@ -83,9 +83,6 @@
                 <li>
                     jQuery
                 </li>
-                <li>
-                    Javascript
-                </li>
         </ul>
         <h6>Architecture & Patterns</h6>
         <ul>
@@ -99,13 +96,10 @@
                     Event-Driven Architecture
                 </li>
                 <li>
-                    CQRS
-                </li>
-                <li>
                     SOLID Principles
                 </li>
                 <li>
-                    Authentication and Authorization
+                    Authentication and Authorization Patterns
                 </li>
             </ul>
         <h6>DevOps & Cloud</h6>
@@ -120,19 +114,13 @@
                     Kubernetes
                 </li>
                 <li>
-                    Rancher
+                    Azure App Service
                 </li>
                 <li>
-                    Azure Functions
-                </li>
-                <li>
-                    Azure Logic Apps
+                    Azure Logic/Function Apps
                 </li>
                 <li>
                     Azure Data Lake
-                </li>
-                <li>
-                    Jenkins
                 </li>
             </ul>
         <h6>Databases</h6>
@@ -141,19 +129,10 @@
                     SQL Server
                 </li>
                 <li>
-                    MySQL
-                </li>
-                <li>
                     sqlite
                 </li>
                 <li>
                     Azure Cosmos DB
-                </li>
-                <li>
-                    MongoDB
-                </li>
-                <li>
-                    PostgreSQL
                 </li>
             </ul>
         <h6>Big Data & ETL</h6>
@@ -191,9 +170,8 @@
         <h6>Spanish: Basic</h6><br>
 
         <h2>Personal Projects</h2>
-        <h3>ainsBuilder - WIP 2025</h3>
-        <img src="./img/ainsbuilder.jpg" alt="ainsBuilder mockup image.">
-        <p>A site-builder called <a href="https://github.com/cloudsmithr/ainsBuilder">ainsBuilder</a>, using .NET and Angular. In active development, image currently a mockup.</p>
+        <h3>blogbuilder - WIP 2025</h3>
+        <p>A microblogging platform called <a href="https://github.com/cloudsmithr/blogbuilder">blogbuilder</a>. You're seeing it in action right now!</p>
 
         <h3>quadrantica - 2018</h3>
         <iframe width="560" height="315" src="https://www.youtube.com/embed/u4mkyNp2wb4?si=EaX7tsNGkl3P7A19" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>

@@ -1,5 +1,4 @@
 <?php
-
 namespace src\core;
 
 use SQLite3;
@@ -35,8 +34,8 @@ class database
                 previewimage TEXT,
                 content TEXT NOT NULL,
                 tags TEXT,
-                created_at INTEGER NOT NULL,
-                updated_at INTEGER NOT NULL
+                createdat INTEGER NOT NULL,
+                updatedat INTEGER NOT NULL
             )
         ");
     }

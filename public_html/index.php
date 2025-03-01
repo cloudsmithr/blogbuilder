@@ -1,7 +1,4 @@
 <?php
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 require_once __DIR__ . '/../src/core/autoload.php'; // auto-loads classes
 
 use src\controllers\maincontroller;
@@ -30,7 +27,7 @@ switch ($uri)
     case 'blog':
         $blogcontroller->index();
         break;
-    case preg_match('/^blog\/(.+)$/', $uri, $matches):
+    case preg_match('/^blog\/(.+)$/', $uri, $matches) ? true : false:
         $blogcontroller->show($matches[1]);
         break;
     default:

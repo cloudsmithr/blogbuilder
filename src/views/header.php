@@ -1,10 +1,23 @@
+<?php
+// Get the protocol (http or https)
+$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
+// Get the current host (e.g., localhost, admin.local, rsmith.local)
+$host = $_SERVER['HTTP_HOST'];
+// Get the directory where this script is running
+$scriptdir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
+// Ensure the base URL does not include '/views'
+$baseurl = rtrim($scriptdir, '/views');
+// Full base URL
+$baseurl = "{$protocol}://{$host}{$baseurl}";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ryan A. Smith | Fullstack Software Engineer</title>
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="<?= $baseurl; ?>/css/style.css">
     <script>
         if (localStorage.getItem('theme') === 'dark') {
             document.documentElement.setAttribute('data-theme', 'dark');
@@ -14,9 +27,9 @@
 <body>
     <header class="header">
         <div class="container">
-            <a href="/">
+            <a href="<?= $baseurl; ?>">
                 <div class="logo">
-                    <img src="./img/logo.png" alt="Logo">
+                    <img src="<?= $baseurl; ?>/img/logo.png" alt="Logo">
                     <span>rsmith.cloud</span>
                 </div>
             </a>

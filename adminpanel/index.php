@@ -29,7 +29,7 @@ include __DIR__ . '/../src/adminviews/adminheader.php';
             <tr>
                 <td><?= htmlspecialchars($post['title']) ?></td>
                 <td><?= htmlspecialchars($post['subheader']) ?></td>
-                <td><?= htmlspecialchars($post['content']) ?></td>
+                <td><?= substr(htmlspecialchars($post['content']), 0, 92) ?>...</td>
                 <td>
                     <a href="postedit.php?id=<?= $post['id'] ?>">Edit</a><br><br>
                     <a href="postdelete.php?id=<?= $post['id'] ?>" onclick="return confirm('Delete this post?')">Delete</a>

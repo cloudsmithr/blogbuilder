@@ -1,5 +1,4 @@
 <?php
-
 namespace src\controllers;
 use src\core\view;
 

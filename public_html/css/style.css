@@ -285,6 +285,10 @@ a:hover{
     background: var(--content-header1-background);
 }
 
+.content-section small{
+    float:right;
+}
+
 .content-section h2::before{    
     content: "↪";
     margin-right: 8px;
@@ -373,7 +377,7 @@ a:hover{
     margin-bottom:25px;
 }
 
-.content-section img{
+.content-section .previewimage{
     width: 100%;
     max-width: 600px;
     display: block;

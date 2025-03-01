@@ -16,7 +16,7 @@ class post
 
     public function getallposts(): array
     {
-        $result = $this->db->query("SELECT * FROM posts ORDER BY created_at DESC");
+        $result = $this->db->query("SELECT * FROM posts ORDER BY createdat DESC");
         $posts = [];
 
         while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
@@ -47,8 +47,8 @@ class post
     public function createpost(string $title, string $subheader, string $slug, string $previewimage, string $content, string $tags): bool
     {
         $stmt = $this->db->prepare("
-            INSERT INTO posts (title, subheader, slug, previewimage, content, tags, created_at, updated_at)
-            VALUES (:title, :subheader, :slug, :previewimage, :content, :tags, :created_at, :updated_at)
+            INSERT INTO posts (title, subheader, slug, previewimage, content, tags, createdat, updatedat)
+            VALUES (:title, :subheader, :slug, :previewimage, :content, :tags, :createdat, :updatedat)
         ");
 
         $stmt->bindValue(':title', $title, SQLITE3_TEXT);
@@ -57,8 +57,8 @@ class post
         $stmt->bindValue(':previewimage', $previewimage, SQLITE3_TEXT);
         $stmt->bindValue(':content', $content, SQLITE3_TEXT);
         $stmt->bindValue(':tags', $tags, SQLITE3_TEXT);
-        $stmt->bindValue(':created_at', time(), SQLITE3_INTEGER);
-        $stmt->bindValue(':updated_at', time(), SQLITE3_INTEGER);
+        $stmt->bindValue(':createdat', time(), SQLITE3_INTEGER);
+        $stmt->bindValue(':updatedat', time(), SQLITE3_INTEGER);
 
         return $stmt->execute() !== false;
     }
@@ -67,7 +67,7 @@ class post
     {
         $stmt = $this->db->prepare("
             UPDATE posts
-            SET title = :title, subheader = :subheader, slug = :slug, previewimage = :previewimage, content = :content, tags = :tags, updated_at = :updated_at
+            SET title = :title, subheader = :subheader, slug = :slug, previewimage = :previewimage, content = :content, tags = :tags, updatedat = :updatedat
             WHERE id = :id
         ");
 
@@ -78,7 +78,7 @@ class post
         $stmt->bindValue(':previewimage', $previewimage, SQLITE3_TEXT);
         $stmt->bindValue(':content', $content, SQLITE3_TEXT);
         $stmt->bindValue(':tags', $tags, SQLITE3_TEXT);
-        $stmt->bindValue(':updated_at', time(), SQLITE3_INTEGER);
+        $stmt->bindValue(':updatedat', time(), SQLITE3_INTEGER);
 
         return $stmt->execute() !== false;
     }
