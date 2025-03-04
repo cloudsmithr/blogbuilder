@@ -8,7 +8,7 @@ require_once __DIR__ . '/../src/core/autoload.php';
 use src\models\post;
 
 $postModel = new post();
-$posts = $postModel->getAllPosts();
+$posts = $postModel->getAllPosts(true);
 
 include __DIR__ . '/../src/adminviews/adminheader.php';
 ?>
@@ -24,6 +24,7 @@ include __DIR__ . '/../src/adminviews/adminheader.php';
             <th>Subheader</th>
             <th>Content</th>
             <th>Actions</th>
+            <th>Published</th>
         </tr>
         <?php foreach ($posts as $post): ?>
             <tr>
@@ -33,6 +34,10 @@ include __DIR__ . '/../src/adminviews/adminheader.php';
                 <td>
                     <a href="postedit.php?id=<?= $post['id'] ?>">Edit</a><br><br>
                     <a href="postdelete.php?id=<?= $post['id'] ?>" onclick="return confirm('Delete this post?')">Delete</a>
+                    <a href="posttoggle.php?id=<?= $post['id'] ?>">Toggle Publish</a>
+                </td>
+                <td>
+                    <?= htmlspecialchars($post['published']) ?>
                 </td>
             </tr>
         <?php endforeach; ?>

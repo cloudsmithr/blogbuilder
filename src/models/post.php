@@ -14,9 +14,12 @@ class post
         $this->db = database::getInstance();
     }
 
-    public function getallposts(): array
+    public function getallposts(bool $includeUnpublished = false): array
     {
-        $result = $this->db->query("SELECT * FROM posts ORDER BY createdat DESC");
+        if ($includeUnpublished)
+            $result = $this->db->query("SELECT * FROM posts ORDER BY createdat DESC");
+        else
+            $result = $this->db->query("SELECT * FROM posts WHERE published = 1 ORDER BY createdat DESC");
         $posts = [];
 
         while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
@@ -26,29 +29,39 @@ class post
         return $posts;
     }
 
-    public function getpostbyslug(string $slug): ?array
+    public function getpostbyslug(string $slug, bool $includeUnpublished = false): ?array
     {
-        $stmt = $this->db->prepare("SELECT * FROM posts WHERE slug = :slug LIMIT 1");
+        $sql = "SELECT * FROM posts WHERE slug = :slug";
+        if (!$includeUnpublished) {
+            $sql .= " AND published = 1";
+        }
+        $sql .= " LIMIT 1";    
+        $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':slug', $slug, SQLITE3_TEXT);
         $result = $stmt->execute();
 
         return $result->fetchArray(SQLITE3_ASSOC) ?: null;
     }
 
-    public function getpostbyid(int $id): ?array
+    public function getpostbyid(int $id, bool $includeUnpublished = false): ?array
     {
-        $stmt = $this->db->prepare("SELECT * FROM posts WHERE id = :id LIMIT 1");
+        $sql = "SELECT * FROM posts WHERE id = :id ";
+        if (!$includeUnpublished) {
+            $sql .= " AND published = 1";
+        }
+        $sql .= " LIMIT 1";  
+        $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
         $result = $stmt->execute();
 
         return $result->fetchArray(SQLITE3_ASSOC) ?: null;
     }
 
-    public function createpost(string $title, string $subheader, string $slug, string $previewimage, string $content, string $tags): bool
+    public function createpost(string $title, string $subheader, string $slug, string $previewimage, string $content, string $tags, int $published = 0): ?int
     {
         $stmt = $this->db->prepare("
-            INSERT INTO posts (title, subheader, slug, previewimage, content, tags, createdat, updatedat)
-            VALUES (:title, :subheader, :slug, :previewimage, :content, :tags, :createdat, :updatedat)
+            INSERT INTO posts (title, subheader, slug, previewimage, content, tags, published, createdat, updatedat)
+            VALUES (:title, :subheader, :slug, :previewimage, :content, :tags, :published, :createdat, :updatedat)
         ");
 
         $stmt->bindValue(':title', $title, SQLITE3_TEXT);
@@ -57,17 +70,22 @@ class post
         $stmt->bindValue(':previewimage', $previewimage, SQLITE3_TEXT);
         $stmt->bindValue(':content', $content, SQLITE3_TEXT);
         $stmt->bindValue(':tags', $tags, SQLITE3_TEXT);
+        $stmt->bindValue(':published', $published, SQLITE3_INTEGER);        
         $stmt->bindValue(':createdat', time(), SQLITE3_INTEGER);
         $stmt->bindValue(':updatedat', time(), SQLITE3_INTEGER);
 
-        return $stmt->execute() !== false;
+        if ($stmt->execute()) {
+            return $this->db->lastInsertRowID(); // ✅ Return the new post ID
+        }
+
+        return null;
     }
 
-    public function updatepost(int $id, string $title, string $subheader, string $slug, string $previewimage, string $content, string $tags): bool
+    public function updatepost(int $id, string $title, string $subheader, string $slug, string $previewimage, string $content, string $tags, int $published = 0): bool
     {
         $stmt = $this->db->prepare("
             UPDATE posts
-            SET title = :title, subheader = :subheader, slug = :slug, previewimage = :previewimage, content = :content, tags = :tags, updatedat = :updatedat
+            SET title = :title, subheader = :subheader, slug = :slug, previewimage = :previewimage, content = :content, tags = :tags, published = :published, updatedat = :updatedat
             WHERE id = :id
         ");
 
@@ -78,6 +96,7 @@ class post
         $stmt->bindValue(':previewimage', $previewimage, SQLITE3_TEXT);
         $stmt->bindValue(':content', $content, SQLITE3_TEXT);
         $stmt->bindValue(':tags', $tags, SQLITE3_TEXT);
+        $stmt->bindValue(':published', $published, SQLITE3_INTEGER);        
         $stmt->bindValue(':updatedat', time(), SQLITE3_INTEGER);
 
         return $stmt->execute() !== false;
@@ -86,6 +105,59 @@ class post
     public function deletepost(int $id): bool
     {
         $stmt = $this->db->prepare("DELETE FROM posts WHERE id = :id");
+        $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
+
+        return $stmt->execute() !== false;
+    }
+
+    public function updatepublishedstatus(int $id, int $published): bool
+    {
+        $stmt = $this->db->prepare("
+            UPDATE posts
+            SET published = :published, updatedat = :updatedat
+            WHERE id = :id
+        ");
+
+        $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
+        $stmt->bindValue(':published', $published, SQLITE3_INTEGER);
+        $stmt->bindValue(':updatedat', time(), SQLITE3_INTEGER);
+
+        return $stmt->execute() !== false;
+    }
+
+    public function autosavecontent(int $id, string $autosavecontent): bool
+    {
+        $stmt = $this->db->prepare("
+            UPDATE posts 
+            SET autosavecontent = :autosavecontent
+            WHERE id = :id
+        ");
+
+        $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
+        $stmt->bindValue(':autosavecontent', $autosavecontent, SQLITE3_TEXT);
+
+        return $stmt->execute() !== false;
+    }
+
+    // ✅ Retrieve autosaved content
+    public function getautosavedcontent(int $id): ?string
+    {
+        $stmt = $this->db->prepare("SELECT autosavecontent FROM posts WHERE id = :id");
+        $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
+        $result = $stmt->execute();
+        
+        $row = $result->fetchArray(SQLITE3_ASSOC);
+        return $row ? $row['autosavecontent'] : null;
+    }
+
+    public function clearautosavecontent(int $id): bool
+    {
+        $stmt = $this->db->prepare("
+            UPDATE posts 
+            SET autosavecontent = ''
+            WHERE id = :id
+        ");
+
         $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
 
         return $stmt->execute() !== false;

@@ -33,7 +33,9 @@ class database
                 slug TEXT UNIQUE NOT NULL,
                 previewimage TEXT,
                 content TEXT NOT NULL,
+                autosavecontent TEXT,
                 tags TEXT,
+                published INTEGER NOT NULL DEFAULT 0,
                 createdat INTEGER NOT NULL,
                 updatedat INTEGER NOT NULL
             )
